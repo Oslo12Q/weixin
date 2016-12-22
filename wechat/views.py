@@ -59,7 +59,20 @@ def parseTxtMsg(request):
         else:
             msg = '欢迎访问车友同行微信公众号，本公众号正在建设中，目前提供的服务有限，输入1听一个笑话，输入2查看当前时间,任意输入将重新收到本消息。'
 
-    elif MsgType == 'event':
+    if MsgType == 'image':
+	msg = '您发的图片我们已经收到。'
+    if MsgType == 'voice':
+	msg = '感谢您的留言，我们会尽快处理。'
+    if MsgType == 'video':
+	msg = '感谢您的留言，我们会尽快处理。'
+    if MsgType == 'shortvideo':
+	msg = '感谢您的留言，我们会尽快处理。'
+    if MsgType == 'location':
+	msg = msg = '您当前尚未绑定设备哦，如需绑定，点击<a href="http://dev.yijiayinong.com/ceshi/">扫一扫</a>，对准设备上的二维码即可！'
+    if MsgType == 'link':
+	msg = '感谢您的留言，我们会尽快处理。'
+    
+    if MsgType == 'event':
 	msgContent = xml.find('Event').text
 	print msgContent
 	if msgContent == 'subscribe':
