@@ -1,0 +1,40 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+import django
+
+if django.VERSION >= (1, 10):
+    from django.urls import reverse_lazy
+else:
+    from django.core.urlresolvers import reverse_lazy
+
+from table.columns import Column
+from table.columns.calendarcolumn import CalendarColumn
+from table.columns.sequencecolumn import SequenceColumn
+from table.columns.imagecolumn import ImageColumn
+from table.columns.linkcolumn import LinkColumn, Link, ImageLink
+from table.columns.checkboxcolumn import CheckboxColumn
+
+from table import Table
+from .models import *
+
+class AjaxSourceTable(Table):
+    id = Column(field = 'bulk_id',sortable = False)
+    bulk_title = Column(field = 'bulk_title',sortable = False)
+    reseller_name = Column(field = 'reseller_name',sortable = False)
+    reseller_mob = Column(field = 'reseller_mob',sortable = False)
+    bulk_receive_mode = Column(field = 'bulk_receive_mode')
+
+    start_time = Column(field = 'start_time',searchable = False)
+#    dead_time = Column(field = 'dead_time',searchable= False)
+    create_time = Column(field = 'create_time')   
+
+    bulk_status = Column(field = 'bulk_status')
+    countsize = Column(field = 'countsize')
+    details = Column(field = 'id',sortable = False)
+    class Meta:
+        model = BulkDetails
+        ajax = True
+        ajax_source = reverse_lazy('ajax_source_api')
+
+

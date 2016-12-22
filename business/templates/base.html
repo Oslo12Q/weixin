@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<!-- BEGIN META -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Custom Theme">
+    <!-- END META -->	
+	<!-- BEGIN STYLESHEET-->
+		<link href="/images/static/css/bootstrap.min.css" rel="stylesheet"><!-- BOOTSTRAP CSS -->
+		<link href="/images/static/css/bootstrap-reset.css" rel="stylesheet"><!-- BOOTSTRAP CSS -->
+		<link href="/images/static/moudle/font-awesome/css/font-awesome.css" rel="stylesheet"><!-- FONT AWESOME ICON CSS -->
+		<link href="/images/static/css/style.css" rel="stylesheet"><!-- THEME BASIC CSS -->
+		<link href="/images/static/css/style-responsive.css" rel="stylesheet"><!-- THEME RESPONSIVE CSS -->
+    <!--[if lt IE 9]>
+		<script src="js/html5shiv.js">
+		</script>
+		<script src="js/respond.min.js">
+		</script>
+	<![endif]-->
+	<!-- END STYLESHEET-->
+	
+    <title>{% block head_title %}{% endblock %}</title>
+    {% block extra_head %}
+    {% endblock %}
+  </head>
+
+  <body class="login-screen">
+	<div class="container">
+		{% block body %}
+
+		{% if messages %}
+<<<<<<< HEAD
+		<!-- <div>
+=======
+		<!--<div>
+>>>>>>> f74d1d5c8864ef5e6d11415045c8a759748856a4
+		  <strong>Messages:</strong>
+		  <ul>
+		{% for message in messages %}
+		<li>{{message}}</li>
+		{% endfor %}
+		  </ul>
+<<<<<<< HEAD
+		</div> -->
+=======
+		</div>-->
+>>>>>>> f74d1d5c8864ef5e6d11415045c8a759748856a4
+		{% endif %}
+
+		<!--<div>
+		  <strong>Menu:</strong>
+		  <ul>
+		{% if user.is_authenticated %}
+		<li><a href="{% url 'account_email' %}">修改邮箱</a></li>
+		<li><a href="{% url 'account_logout' %}">Sign Out</a></li>
+		{% else %}
+		<li><a href="{% url 'account_login' %}">登录</a></li>
+		<li><a href="{% url 'account_signup' %}">注册</a></li>
+		{% endif %}
+		  </ul>
+		</div>-->
+		{% block content %}
+		{% endblock %}
+		{% endblock %}
+		{% block extra_body %}
+		{% endblock %}
+	</div>
+  
+  
+  
+  <!-- MODAL 
+        <div  id="myModal" class="modal fade">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                  &times;
+                </button>
+                <h4 class="modal-title">
+                  Forgot Password ?
+                </h4>
+              </div>
+              <div class="modal-body">
+                <p>
+                  Enter your e-mail address below to reset your password.
+                </p>
+                <input type="text" name="email" placeholder="Email" autocomplete="off" class="form-control placeholder-no-fix">
+              </div>
+              <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-default" type="button">
+                  Cancel
+                </button>
+                <button class="btn btn-success" type="button">
+                  Submit
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+	 END MODAL -->
+  
+  
+ 
+	<!-- BEGIN JS -->
+	<script src="/images/static/js/jquery.js" ></script><!-- BASIC JQUERY LIB. JS -->
+	<script src="/images/static/js/bootstrap.min.js" ></script><!-- BOOTSTRAP JS -->
+	<!-- END JS -->
+  </body>
+</html>

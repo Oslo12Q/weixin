@@ -1,0 +1,35 @@
+from django.shortcuts import render
+
+# Create your views here.
+
+from .models import *
+from table.views import FeedDataView
+from business.tables import (
+    AjaxSourceTable,OrderTable
+)
+
+
+class MyDataView(FeedDataView):
+
+    token = AjaxSourceTable.token
+
+    def get_queryset(self):
+
+        id = self.request.GET['filter[batch_id]']
+        name = self.request.GET['filter[batch_name]']
+        mob = self.request.GET['filter[batch_mob]']
+        status = self.request.GET['fileter[batch_status]']
+
+        queryset = super(MyDataView, self).get_queryset()
+
+        if id:
+            queryset = queryset.filter(id = id)
+        if name:
+            queryset = queryset.filter(title__contains = name)
+        if mob:
+            queryset = queryset.filter(reseller_mob__contains = mob)
+        if status:
+            queryset = queryset.filter(status = status)
+
+        return queryset
+
