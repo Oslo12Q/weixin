@@ -22,9 +22,6 @@ from django.conf.urls.static import static
 
 from . import views
 
-
-#from wechat.views import weixin
-
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/',include('allauth.urls')),
@@ -37,7 +34,6 @@ urlpatterns = [
 
     url(r'^ceshi/$',business.views.ceshi,name='ceshi'),
     url(r'^location/$',business.views.location,name='location'),   
-#    url('weixin/$', weixin),
     url(r'^wechat/', include('wechat.urls')),
     url(r'^MP_verify_mxqdYEZf8FuVDLUT.txt', views.mp_verify, name='mp_verify'),
 

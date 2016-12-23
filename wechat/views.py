@@ -10,6 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 import datetime
 import urllib2
+import urllib
 
 from wechat import config
 
@@ -22,6 +23,8 @@ from rest_framework.decorators import(
         parser_classes,
 )
 from . import utils
+from django.shortcuts import render
+
 
 def checkSignature(request):
 
@@ -38,7 +41,7 @@ def checkSignature(request):
     if tmpstr == signature:
         return HttpResponse(echoStr)
     else:
-        return HttpResponse("LZQSGSG")
+        return HttpResponse("Hello World")
 
 def parseTxtMsg(request):
 
@@ -74,19 +77,24 @@ def parseTxtMsg(request):
     
     if MsgType == 'event':
 	msgContent = xml.find('Event').text
-	print msgContent
 	if msgContent == 'subscribe':
 	    msg = '感谢您的关注！'
 
 	if msgContent == 'unsubscribe':
 	    msg = '取消关注？'
-
+	    
         if msgContent == 'CLICK':
-	    print xml
 	    key = xml.find('EventKey').text
 	    if key == 'ceshi':
 		msg = '您当前尚未绑定设备哦，如需绑定，点击<a href="http://dev.yijiayinong.com/ceshi/">扫一扫</a>，对准设备上的二维码即可！'
-	   
+	    if key == 'news':
+		title = '查看违章'
+                description = '查看违章'
+                picurl = 'http://mmbiz.qpic.cn/mmbiz_png/Y3Yj4z3oKX4jI4SytSgULO6mzq4ECAgJUC3urV40CgIxRaJQQ1QFCSZcKxt8m3YMucHvv0K59zYJicKZzyia1jibg/0?wx_fmt=png'
+                url = 'http://m.weizhang8.cn'
+		
+		return getResponseImageTextXml(FromUserName,ToUserName,title,description,picurl,url)
+
 	if msgContent == 'VIEW':
 		msg = '' 
 
@@ -101,8 +109,29 @@ def sendTxtMsg(FromUserName,ToUserName,Content):
     <MsgType><![CDATA[text]]></MsgType>
     <Content><![CDATA[%s]]></Content>
     </xml>""" %(FromUserName,ToUserName,datetime.datetime.now(),Content)
-
+    
     return HttpResponse(reply_xml)
+
+
+def getResponseImageTextXml(FromUserName, ToUserName,title,description,picurl,url):  
+    
+    reply_xml = """<xml>
+	<ToUserName><![CDATA[%s]]></ToUserName>
+	<FromUserName><![CDATA[%s]]></FromUserName>
+	<CreateTime>%s</CreateTime>
+	<MsgType><![CDATA[news]]></MsgType>
+	<ArticleCount>1</ArticleCount>
+	<Articles>
+	<item>
+	    <Title><![CDATA[%s]]></Title>
+	    <Description><![CDATA[%s]]></Description>
+	    <PicUrl><![CDATA[%s]]></PicUrl>
+	    <Url><![CDATA[%s]]></Url>
+	</item>
+	</Articles>
+	</xml>"""%(FromUserName,ToUserName,datetime.datetime.now(),title,description,picurl,url)
+    return HttpResponse(reply_xml)
+
 
 @csrf_exempt
 def weixin(request):
@@ -118,6 +147,7 @@ def get_token():
     config.AppID, config.AppSecret)
     result = urllib2.urlopen(url).read()
     access_token = json.loads(result).get('access_token')
+    print access_token
     return access_token
 
 def fetchJsApiTicket():
@@ -228,9 +258,9 @@ def createMenu(request):
             "url": "http://www.baidu.com"
         },
         {
-           "type": "view",
+           "type": "click",
            "name": "更多服务",
-           "url": "http://m.weizhang8.cn/"
+           "key": "news"
         }]
     }
 
@@ -241,3 +271,42 @@ def createMenu(request):
     result = response.read()
     return HttpResponse(result)
 
+
+#获取图文列表
+def Material():
+   
+    url = "https://api.weixin.qq.com/cgi-bin/material/batchget_material?access_token=%s" % get_token()
+    data = {
+    	"type":"news",
+    	"offset":"0",
+    	"count":"1"
+    }
+    req = urllib2.Request(url)
+    req.add_header('Content-Type', 'application/json')
+    req.add_header('encoding', 'utf-8')
+    response = urllib2.urlopen(req, json.dumps(data,ensure_ascii=False).encode('utf8'))
+    result = response.read()
+    media = json.loads(result)
+    media_id = (media['item'][0])['media_id']
+    print media_id
+    return media_id
+
+#根据media_id,获取图文。
+@api_view(['GET'])
+@csrf_exempt
+def UpdateMaterial(request):
+    
+    media_id = Material()
+    url = 'https://api.weixin.qq.com/cgi-bin/material/get_material?access_token=%s' % get_token()
+    data = {
+	"media_id":media_id
+    }
+    req = urllib2.Request(url)
+    req.add_header('Content-Type', 'application/json')
+    req.add_header('encoding', 'utf-8')
+    response = urllib2.urlopen(req, json.dumps(data,ensure_ascii=False).encode('utf8'))
+    res = response.read()
+    result = json.loads(res)
+    return Response(result)
+
+    

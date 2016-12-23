@@ -8,4 +8,5 @@ urlpatterns = (
    url(r'^create/$',createMenu),
    url(r'^weixinJsapi/$',views.weixinJsapi,name='weixinJsapi'),
    url(r'^weixin1Jsapi/$',views.weixin1Jsapi,name='weixin1Jsapi'),
+   url(r'^UpdateMaterial/$',views.UpdateMaterial,name='UpdateMaterial'),
 )
